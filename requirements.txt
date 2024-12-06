@@ -1,20 +1,6 @@
-# Flask for the web application
 Flask==2.3.2
-
-# OpenCV for image processing
 opencv-python==4.8.1.78
 opencv-python-headless==4.8.1.78
-
-# YOLO from Ultralytics for object detection
 ultralytics==8.0.117
-
-# Utilities for handling file paths, security, and image processing
-Werkzeug>=2.3.0
 numpy>=1.21.0
-uuid>=1.30
-
-# To ensure compatibility with JSON response handling
-jsonify>=1.0.0
-
-# Zip file handling (might not require installation as it's part of Python's standard library)
-zipfile>=0.0.0
+Werkzeug>=2.3.0
