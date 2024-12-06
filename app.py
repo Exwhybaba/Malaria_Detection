@@ -1,4 +1,3 @@
-import zipfile
 from flask import Flask, request, render_template, send_file, jsonify
 import cv2
 from ultralytics import YOLO
@@ -22,20 +21,34 @@ os.makedirs(ZIP_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
 app.config['ZIP_FOLDER'] = ZIP_FOLDER
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'bmp', 'tiff'}  # Add valid extensions as needed
-
-@app.route('/')
-def home():
-    """
-    Home page with an upload form.
-    """
-    return render_template('index.html')
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'bmp', 'tiff'}
 
 def allowed_file(filename):
     """
     Check if a file has an allowed extension.
     """
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/')
+def home():
+    """
+    Homepage with project description and navigation buttons.
+    """
+    return render_template('home.html')
+
+@app.route('/upload')
+def upload_page():
+    """
+    File upload page.
+    """
+    return render_template('upload.html')
+
+@app.route('/about')
+def about():
+    """
+    About the team page.
+    """
+    return render_template('about.html')
 
 @app.route('/predict', methods=['POST'])
 def predict():
