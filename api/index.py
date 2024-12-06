@@ -119,16 +119,26 @@ def predict():
         os.remove(file_path)
 
     if output_files:
-        # Create a ZIP file for the processed images
-        zip_filename = os.path.join(app.config['ZIP_FOLDER'], f"processed_images_{uuid.uuid4().hex}.zip")
+        # Ensure the target directory for the ZIP file exists
+        ZIP_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'zips')
+        if not os.path.exists(ZIP_FOLDER):
+            os.makedirs(ZIP_FOLDER)
+
+        # Create the ZIP file in the correct location outside the API directory
+        zip_filename = os.path.join(ZIP_FOLDER, f"processed_images_{uuid.uuid4().hex}.zip")
         with zipfile.ZipFile(zip_filename, 'w') as zipf:
             for file_path in output_files:
                 zipf.write(file_path, os.path.basename(file_path))
                 os.remove(file_path)  # Remove the processed file after zipping
 
-        return send_file(zip_filename, mimetype='application/zip', as_attachment=True, download_name="processed_images.zip")
+        # Send the ZIP file to the user
+        if os.path.exists(zip_filename):
+            return send_file(zip_filename, mimetype='application/zip', as_attachment=True, download_name="processed_images.zip")
+        else:
+            return jsonify({"error": "Failed to create the ZIP file"}), 500
 
     return jsonify({"error": "No valid images processed"}), 500
 
 # Ensure the app callable is exposed for platforms like Vercel
-app=app
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)

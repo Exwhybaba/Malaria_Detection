@@ -4,48 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Upload for Object Detection</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 50px;
-            text-align: center;
-        }
-        h1 {
-            color: #4CAF50;
-        }
-        form {
-            margin-top: 20px;
-        }
-        input[type="file"] {
-            padding: 10px;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="../static/css/upload.css">
 </head>
 <body>
-    <h1>Upload Images or Folders for Object Detection</h1>
-    <p>Select one or more images or an entire folder of images for processing.</p>
+    <div class="container">
+        <h1>Upload Images for Object Detection</h1>
+        <p>Select one or more images or an entire folder for processing.</p>
 
-    <!-- Form to upload a single or multiple files -->
-    <form action="/predict" method="POST" enctype="multipart/form-data">
-        <label for="single-files">Upload Single or Multiple Files:</label><br>
-        <input id="single-files" type="file" name="images" multiple>
-        <br><br>
+        <form action="/predict" method="POST" enctype="multipart/form-data">
+            <label for="single-files">Upload Single or Multiple Files:</label>
+            <input id="single-files" type="file" name="images" multiple>
+            
+            <label for="folder-upload">Or Upload an Entire Folder:</label>
+            <input id="folder-upload" type="file" name="images" webkitdirectory>
+            
+            <button type="submit">Upload and Predict</button>
+        </form>
 
-        <label for="folder-upload">Or Upload an Entire Folder:</label><br>
-        <input id="folder-upload" type="file" name="images" webkitdirectory>
-        <br><br>
-
-        <button type="submit">Upload and Predict</button>
-    </form>
+        <p class="note">
+            By uploading images, you agree to our <a href="#">terms and conditions</a>.
+        </p>
+    </div>
 </body>
 </html>
