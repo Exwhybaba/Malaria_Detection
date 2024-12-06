@@ -1,130 +1,133 @@
-/* Reset default margins and paddings */
-* {
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f8f9fa;
+    background-color: #f8f8f8;
     color: #333;
-    line-height: 1.6;
 }
 
-/* Header Section */
-header {
-    background-color: #4CAF50; /* Complementary green for the project */
-    color: white;
-    padding: 30px 0;
-    text-align: center;
+/* Navbar Styles */
+.navbar {
+    background-color: #007bff;
+    padding: 15px 0;
 }
 
-header h1 {
-    font-size: 2.5em;
-    margin-bottom: 10px;
-}
-
-header p {
-    font-size: 1.2em;
-    font-weight: 300;
-}
-
-/* Description Section */
-#description {
+.navbar .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 40px 20px;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 0 20px;
 }
 
-#description .content-container {
+.navbar-logo {
+    font-size: 24px;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.navbar-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
 }
 
-#description .text {
-    flex: 1;
-    padding: 20px;
+.navbar-links li {
+    margin-left: 20px;
 }
 
-#description h2 {
-    font-size: 2em;
-    color: #4CAF50;
-    margin-bottom: 20px;
-}
-
-#description p {
-    font-size: 1.1em;
-    line-height: 1.6;
-}
-
-#description .image img {
-    max-width: 100%;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    flex: 0.6;
-}
-
-/* Objective Section */
-#objective {
-    background-color: #ffffff;
-    padding: 40px 20px;
-    margin: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-#objective .text {
-    margin-bottom: 20px;
-}
-
-#objective .button-container {
-    text-align: center;
-    margin-top: 30px;
-}
-
-.btn {
-    padding: 12px 30px;
-    text-align: center;
-    font-size: 1.1em;
-    font-weight: bold;
-    border-radius: 5px;
+.navbar-links a {
     text-decoration: none;
     color: white;
-    margin: 10px;
-    transition: background-color 0.3s;
+    font-weight: 500;
+    font-size: 16px;
 }
 
-.upload-btn {
-    background-color: #2196F3; /* Blue for the upload button */
+.navbar-links a:hover {
+    text-decoration: underline;
 }
 
-.upload-btn:hover {
-    background-color: #0b7dda;
+/* Hero Section */
+.hero {
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    padding: 80px 20px;
 }
 
-.about-btn {
-    background-color: #f44336; /* Red for the about button */
+.hero h1 {
+    font-size: 50px;
+    margin-bottom: 20px;
 }
 
-.about-btn:hover {
-    background-color: #d32f2f;
+.hero p {
+    font-size: 18px;
+    margin-bottom: 30px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 15px 25px;
+    font-size: 18px;
+    text-decoration: none;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.btn-primary {
+    background-color: #ff5722;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #e64a19;
+}
+
+.btn-secondary {
+    background-color: #ffffff;
+    color: #007bff;
+    border: 2px solid #007bff;
+}
+
+.btn-secondary:hover {
+    background-color: #f1f1f1;
+}
+
+/* About Section */
+.about {
+    background-color: #ffffff;
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.about h2 {
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+.about p {
+    font-size: 18px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
 }
 
 /* Footer */
 footer {
-    background-color: #333;
+    background-color: #007bff;
     color: white;
+    padding: 20px 0;
     text-align: center;
-    padding: 15px 0;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
+    font-size: 14px;
 }

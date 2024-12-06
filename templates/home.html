@@ -3,47 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Malaria Diagnostic Challenge</title>
+    <title>Malaria Detection AI</title>
     <link rel="stylesheet" href="../static/styles/home.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <div class="header-container">
-            <h1>Malaria Diagnostic Challenge</h1>
-            <p>Revolutionizing Malaria Diagnosis with AI and Machine Learning</p>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="navbar-logo">Malaria AI</a>
+            <ul class="navbar-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/upload">Upload Blood Slide</a></li>
+                <li><a href="/about">About Us</a></li>
+            </ul>
         </div>
-    </header>
+    </nav>
 
-    <section id="description">
-        <div class="content-container">
-            <div class="text">
-                <h2>About Malaria</h2>
-                <p>Malaria is one of the world’s most fatal infectious diseases, responsible for hundreds of thousands of deaths annually. It is a major public health issue in Africa, where it predominantly affects children under five and pregnant women.</p>
-                <p>Quick and accurate diagnosis is essential for treatment and management of malaria, but traditional methods of diagnosis, such as microscopic examination of blood slides, are resource-intensive and require skilled technicians, which are often scarce in rural and remote areas.</p>
-            </div>
-            <div class="image">
-                <img src="malaria_image.jpg" alt="Malaria Microscope" />
-            </div>
-        </div>
-    </section>
-
-    <section id="objective">
-        <div class="content-container">
-            <div class="text">
-                <h2>Objective of the Challenge</h2>
-                <p>The objective of this challenge is to develop a multiclass object detection and classification model that can accurately identify and classify malaria parasites in blood slide images, specifically addressing diagnostic needs in Africa.</p>
-                <p>Participants are required to create a machine learning model that can detect the trophozoite stage of malaria and differentiate between infected and uninfected blood cells.</p>
-                <p>A scalable machine learning solution could be implemented in large-scale screening and early warning programs to detect and control malaria outbreaks. Automated diagnostics can also alleviate the burden on healthcare workers, allowing them to focus on treatment and patient care, and improving the efficiency of healthcare systems in resource-limited settings.</p>
-            </div>
-            <div class="button-container">
-                <a href="/upload" class="btn upload-btn">Upload Blood Slide Images</a>
-                <a href="/team" class="btn about-btn">About the Team</a>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>AI for Malaria Detection</h1>
+            <p>Quick and accurate malaria diagnosis to aid healthcare systems in Africa.</p>
+            <div class="hero-buttons">
+                <a href="/upload" class="btn-primary">Upload Blood Slide</a>
+                <a href="/about" class="btn-secondary">About the Team</a>
             </div>
         </div>
     </section>
 
+    <!-- About the Project Section -->
+    <section class="about">
+        <div class="container">
+            <h2>About the Project</h2>
+            <p>Malaria is one of the world’s most fatal infectious diseases, responsible for hundreds of thousands of deaths annually. It is a major public health issue in Africa, particularly affecting children under five and pregnant women. Traditional diagnosis methods, such as microscopic examination of blood slides, are time-consuming, require skilled technicians, and are often scarce in rural areas.</p>
+            <p>The goal of this project is to develop a multiclass object detection and classification model that can accurately identify and classify malaria parasites in blood slide images. The solution will address diagnostic challenges in Africa, aiding in the detection of malaria and differentiating between infected and uninfected blood cells.</p>
+            <p>Automated diagnostic solutions can improve healthcare efficiency, reduce burden on healthcare workers, and assist in large-scale screening programs, helping to detect and control malaria outbreaks.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2024 Malaria Diagnostic Challenge | All rights reserved.</p>
+        <div class="container">
+            <p>&copy; 2024 Malaria AI. All rights reserved.</p>
+        </div>
     </footer>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </body>
 </html>
