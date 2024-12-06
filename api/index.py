@@ -3,8 +3,10 @@ import cv2
 from ultralytics import YOLO
 import os
 import uuid
+import zipfile
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='../templates', static_folder='../static')
+
 
 # Load the YOLO model globally
 model_path = 'best.pt'  # Path to your YOLO model
@@ -128,6 +130,5 @@ def predict():
 
     return jsonify({"error": "No valid images processed"}), 500
 
-
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+# Ensure the app callable is exposed for platforms like Vercel
+app=app
