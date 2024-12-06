@@ -1,12 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Home - Object Detection</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malaria Diagnostic Challenge</title>
+    <link rel="stylesheet" href="../styles/home.css">
 </head>
 <body>
-    <h1>Welcome to the Object Detection Application</h1>
-    <p>This application allows you to upload images and get object detection results using a YOLO model.</p>
-    <a href="/upload"><button>Go to Upload Page</button></a>
-    <a href="/about"><button>About the Team</button></a>
+    <header>
+        <div class="header-container">
+            <h1>Malaria Diagnostic Challenge</h1>
+            <p>Revolutionizing Malaria Diagnosis with AI and Machine Learning</p>
+        </div>
+    </header>
+
+    <section id="description">
+        <div class="content-container">
+            <div class="text">
+                <h2>About Malaria</h2>
+                <p>Malaria is one of the world’s most fatal infectious diseases, responsible for hundreds of thousands of deaths annually. It is a major public health issue in Africa, where it predominantly affects children under five and pregnant women.</p>
+                <p>Quick and accurate diagnosis is essential for treatment and management of malaria, but traditional methods of diagnosis, such as microscopic examination of blood slides, are resource-intensive and require skilled technicians, which are often scarce in rural and remote areas.</p>
+            </div>
+            <div class="image">
+                <img src="malaria_image.jpg" alt="Malaria Microscope" />
+            </div>
+        </div>
+    </section>
+
+    <section id="objective">
+        <div class="content-container">
+            <div class="text">
+                <h2>Objective of the Challenge</h2>
+                <p>The objective of this challenge is to develop a multiclass object detection and classification model that can accurately identify and classify malaria parasites in blood slide images, specifically addressing diagnostic needs in Africa.</p>
+                <p>Participants are required to create a machine learning model that can detect the trophozoite stage of malaria and differentiate between infected and uninfected blood cells.</p>
+                <p>A scalable machine learning solution could be implemented in large-scale screening and early warning programs to detect and control malaria outbreaks. Automated diagnostics can also alleviate the burden on healthcare workers, allowing them to focus on treatment and patient care, and improving the efficiency of healthcare systems in resource-limited settings.</p>
+            </div>
+            <div class="button-container">
+                <a href="/upload" class="btn upload-btn">Upload Blood Slide Images</a>
+                <a href="/team" class="btn about-btn">About the Team</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Malaria Diagnostic Challenge | All rights reserved.</p>
+    </footer>
 </body>
 </html>
