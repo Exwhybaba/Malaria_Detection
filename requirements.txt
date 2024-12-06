@@ -1,6 +1,7 @@
 Flask==2.3.2
 opencv-python==4.8.1.78
 opencv-python-headless==4.8.1.78
-ultralytics==8.0.117
+ultralytics>=8.0.120  # Ensure the latest version for recent updates
+torch>=2.0.0          # PyTorch version compatible with `ultralytics`
 numpy<2
 Werkzeug>=2.3.0
