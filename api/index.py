@@ -139,5 +139,6 @@ def predict():
 
     return jsonify({"error": "No valid images processed"}), 500
 
-# Ensure the app callable is exposed for platforms like Vercel
-app=app
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
