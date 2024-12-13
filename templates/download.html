@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/download.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Processing Complete!</h1>
+        <p><strong>Total Images Processed:</strong> {{ total_count }}</p>
+        <p><strong>Successfully Processed:</strong> {{ success_count }}</p>
+        <p><strong>Failed to Process:</strong> {{ fail_count }}</p>
+
+        <!-- Download buttons -->
+        <div class="download-buttons">
+            <a href="{{ zip_file }}" class="download-button">Download Processed Images (ZIP)</a>
+            <a href="{{ summary_csv }}" class="download-button">Download Summary CSV</a>
+        </div>
+    </div>
+</body>
+</html>

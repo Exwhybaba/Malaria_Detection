@@ -1,21 +1,27 @@
-from flask import Flask, request, render_template, send_file, jsonify
+from flask import Flask, request, render_template, send_file, jsonify, url_for
 import cv2
 from ultralytics import YOLO
 import os
 import uuid
 import zipfile
+from tqdm import tqdm
+import matplotlib.pyplot as plt
+from collections import Counter
+import pandas as pd
+from flask_cors import CORS
 
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
-
+CORS(app)  # This allows all domains to access your Flask app
 
 # Load the YOLO model globally
 model_path = 'best.pt'  # Path to your YOLO model
 model = YOLO(model_path)
 
 # Define the upload and output folders
-UPLOAD_FOLDER = 'uploads'
-OUTPUT_FOLDER = 'outputs'
-ZIP_FOLDER = 'zips'
+BASE_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+UPLOAD_FOLDER = os.path.join(BASE_FOLDER, 'uploads')
+OUTPUT_FOLDER = os.path.join(BASE_FOLDER, 'outputs')
+ZIP_FOLDER = os.path.join(BASE_FOLDER, 'static', 'zips')  # Save ZIP in static folder
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 os.makedirs(ZIP_FOLDER, exist_ok=True)
@@ -56,7 +62,7 @@ def about():
 def predict():
     """
     Endpoint for object detection. Accepts one or more image files, processes them, 
-    and returns a ZIP file containing all processed images.
+    and returns a ZIP file containing all processed images, along with a summary table.
     """
     if 'images' not in request.files:
         return jsonify({"error": "No image files provided"}), 400
@@ -66,8 +72,12 @@ def predict():
         return jsonify({"error": "No selected image files"}), 400
 
     output_files = []  # To store paths of processed images
+    table_data = []
+    total_count = 0
+    success_count = 0
+    fail_count = 0
 
-    for file in files:
+    for file in tqdm(files, desc="Processing images"):
         if file.filename == '':
             continue  # Skip empty files
         if not allowed_file(file.filename):
@@ -82,6 +92,7 @@ def predict():
         image = cv2.imread(file_path)
         if image is None:
             os.remove(file_path)
+            fail_count += 1
             continue
 
         # Perform predictions
@@ -93,19 +104,23 @@ def predict():
         confidences = results[0].boxes.conf.tolist()  # Confidence scores
         names = results[0].names  # Class names dictionary
 
-        # Convert the image to RGB
-        image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        # Count occurrences of each class detected in the image
+        class_counter = Counter()
+        for cls in classes:
+            class_name = names[int(cls)]
+            class_counter[class_name] += 1
 
         # Draw bounding boxes and labels on the image
+        image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         for box, cls, conf in zip(boxes, classes, confidences):
             x1, y1, x2, y2 = map(int, box)
             label = f"{names[int(cls)]} {conf:.2f}"
 
             # Draw bounding box
-            cv2.rectangle(image_rgb, (x1, y1), (x2, y2), (255, 0, 0), 2)
+            cv2.rectangle(image_rgb, (x1, y1), (x2, y2), (255, 0, 0), 4)
 
             # Add label above the box
-            cv2.putText(image_rgb, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+            cv2.putText(image_rgb, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 3)
 
         # Convert RGB back to BGR for saving
         image_bgr = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2BGR)
@@ -115,30 +130,59 @@ def predict():
         cv2.imwrite(output_file_path, image_bgr)
         output_files.append(output_file_path)
 
+        # Extract the image ID from the file path 
+        image_id = os.path.basename(file.filename).split('.')[0]
+
+        # Get the count for WBC and Trophozoite (default to 0 if not found)
+        wbc_count = class_counter.get('WBC', 0)
+        trophozoite_count = class_counter.get('Trophozoite', 0)
+
+        # Add the data to the table
+        table_data.append({
+            'image_id': image_id,
+            'WBC': wbc_count,
+            'Trophozoite': trophozoite_count
+        })
+
+        total_count += 1
+        success_count += 1 if wbc_count > 0 or trophozoite_count > 0 else 0
+
         # Delete the uploaded file after processing
         os.remove(file_path)
 
     if output_files:
-        # Ensure the target directory for the ZIP file exists
-        ZIP_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'zips')
-        if not os.path.exists(ZIP_FOLDER):
-            os.makedirs(ZIP_FOLDER)
-
-        # Create the ZIP file in the correct location outside the API directory
-        zip_filename = os.path.join(ZIP_FOLDER, f"processed_images_{uuid.uuid4().hex}.zip")
+        # Create a ZIP file for processed images in the static folder
+        zip_filename = os.path.join(app.config['ZIP_FOLDER'], f"processed_images_{uuid.uuid4().hex}.zip")
         with zipfile.ZipFile(zip_filename, 'w') as zipf:
             for file_path in output_files:
                 zipf.write(file_path, os.path.basename(file_path))
                 os.remove(file_path)  # Remove the processed file after zipping
 
-        # Send the ZIP file to the user
-        if os.path.exists(zip_filename):
-            return send_file(zip_filename, mimetype='application/zip', as_attachment=True, download_name="processed_images.zip")
-        else:
-            return jsonify({"error": "Failed to create the ZIP file"}), 500
+        # Create a pandas DataFrame for the table
+        df = pd.DataFrame(table_data)
+
+        # Save the DataFrame as a CSV file
+        csv_path = os.path.join(app.config['OUTPUT_FOLDER'], f"summary_{uuid.uuid4().hex}.csv")
+        df.to_csv(csv_path, index=False)
+
+        return render_template(
+            'download.html',
+            zip_file=url_for('static', filename=f'zips/{os.path.basename(zip_filename)}', _external=True),
+            summary_csv=url_for('static', filename=f'csv/{os.path.basename(csv_path)}', _external=True),
+            total_count=total_count,
+            success_count=success_count,
+            fail_count=fail_count
+        )
 
     return jsonify({"error": "No valid images processed"}), 500
 
+
+@app.route('/download', methods=['GET'])
+def download_file():
+    file_path = request.args.get('file_path')
+    if not file_path or not os.path.exists(file_path):
+        return jsonify({"error": "File not found"}), 404
+    return send_file(file_path, as_attachment=True)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
