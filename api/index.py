@@ -94,9 +94,10 @@ def predict():
     total_count = 0
     success_count = 0
     fail_count = 0
+    processed_file_count = 0  # Initialize processed_file_count here
 
     for file in tqdm(files, desc="Processing images"):
-        if file.filename == '': 
+        if file.filename == '':
             continue  # Skip empty files
         if not allowed_file(file.filename):
             continue  # Skip unsupported files (e.g., desktop.ini)
@@ -147,6 +148,7 @@ def predict():
         output_file_path = os.path.join(app.config['OUTPUT_FOLDER'], f"processed_{uuid.uuid4().hex}.jpg")
         cv2.imwrite(output_file_path, image_bgr)
         output_files.append(output_file_path)
+        
 
         # Extract the image ID from the file path 
         image_id = os.path.basename(file.filename).split('.')[0]
@@ -167,8 +169,25 @@ def predict():
 
         # Delete the uploaded file after processing
         os.remove(file_path)
+        processed_file_count = len(output_files)  # Count successfully processed files
+    if processed_file_count == 1:
+        # For a single file, return the result directly
+        table_html = pd.DataFrame(table_data).to_html(classes='table table-striped', index=False)
+        zip_filename = os.path.join(app.config['ZIP_FOLDER'], f"processed_images_{uuid.uuid4().hex}.zip")
+        with zipfile.ZipFile(zip_filename, 'w') as zipf:
+            for file_path in output_files:
+                zipf.write(file_path, os.path.basename(file_path))
+                os.remove(file_path)  # Remove the processed file after zipping
 
-    if output_files:
+        # Schedule the deletion of the ZIP file
+        schedule_deletion(zip_filename, delay=120)
+        return render_template(
+            'result.html',
+            zip_file=url_for('static', filename=f'zips/{os.path.basename(zip_filename)}', _external=True),
+            table_html=table_html
+        )
+
+    elif processed_file_count > 1:
         # Create a ZIP file for processed images in the static folder
         zip_filename = os.path.join(app.config['ZIP_FOLDER'], f"processed_images_{uuid.uuid4().hex}.zip")
         with zipfile.ZipFile(zip_filename, 'w') as zipf:
@@ -182,40 +201,38 @@ def predict():
         # Create a pandas DataFrame for the table
         df = pd.DataFrame(table_data)
 
-        # If only one file is uploaded, render the result page with table
-        if len(files) == 1:
-            table_html = df.to_html(classes='table table-striped', index=False)
-            return render_template(
-                'result.html',
-                table_html=table_html
-            )
-        else:
-            # Save the DataFrame as a CSV file for multiple files
-            csv_path = os.path.join(app.config['CSV_FOLDER'], f"summary_{uuid.uuid4().hex}.csv")
-            df.to_csv(csv_path, index=False)
+        # Save the DataFrame as a CSV file for multiple files
+        csv_path = os.path.join(app.config['CSV_FOLDER'], f"summary_{uuid.uuid4().hex}.csv")
+        df.to_csv(csv_path, index=False)
 
-            # Schedule the deletion of the CSV file
-            schedule_deletion(csv_path, delay=120)
+        # Schedule the deletion of the CSV file
+        schedule_deletion(csv_path, delay=120)
 
-            return render_template(
-                'download.html',
-                zip_file=url_for('static', filename=f'zips/{os.path.basename(zip_filename)}', _external=True),
-                summary_csv=url_for('static', filename=f'csv/{os.path.basename(csv_path)}', _external=True),
-                total_count=total_count,
-                success_count=success_count,
-                fail_count=fail_count
-            )
+        return render_template(
+            'download.html',
+            zip_file=url_for('static', filename=f'zips/{os.path.basename(zip_filename)}', _external=True),
+            summary_csv=url_for('static', filename=f'csv/{os.path.basename(csv_path)}', _external=True),
+            total_count=total_count,
+            success_count=success_count,
+            fail_count=fail_count
+        )
 
     return jsonify({"error": "No valid images processed"}), 500
+
 
 @app.route('/download', methods=['GET'])
 def download_file():
     file_path = request.args.get('file_path')
     if not file_path or not os.path.exists(file_path):
         return jsonify({"error": "File not found"}), 404
+    
+    # Set the response to force download
     response = send_file(file_path, as_attachment=True)
+    response.headers["Content-Disposition"] = f"attachment; filename={os.path.basename(file_path)}"
+    
     response.call_on_close(lambda: os.remove(file_path) if os.path.exists(file_path) else None)
     return response
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

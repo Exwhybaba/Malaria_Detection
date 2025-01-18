@@ -1,114 +1,94 @@
-/* styles.css */
-
-/* Global Styles */
+/* General Styles */
 body {
-    background-color: #f4f7fa;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #333;
-}
-
-/* Container */
-.container {
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-    margin-top: 50px;
-}
-
-/* Header */
-h2 {
-    color: #007bff;
-    font-size: 2.5rem;
-    font-weight: bold;
-    text-align: center;
-}
-
-/* Summary Section */
-.alert-info {
-    background-color: #e3f2fd;
-    border-left: 5px solid #1e88e5;
-    font-size: 1.2rem;
-}
-
-/* Table Styles */
-.table {
-    margin-top: 20px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.table th {
-    background-color: #007bff;
-    color: #fff;
-    font-weight: bold;
-    text-align: center;
-}
-
-.table td {
-    text-align: center;
-    vertical-align: middle;
-    font-size: 1.1rem;
-}
-
-.table-striped tbody tr:nth-of-type(odd) {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
     background-color: #f9f9f9;
-}
-
-/* Buttons */
-.btn-primary, .btn-secondary {
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 1rem;
-    text-transform: uppercase;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
-
-.btn-primary {
-    background-color: #007bff;
-    border: none;
-}
-
-.btn-primary:hover {
-    background-color: #0056b3;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    border: none;
-}
-
-.btn-secondary:hover {
-    background-color: #5a6268;
-}
-
-/* Footer */
-hr {
-    border-top: 1px solid #ddd;
-    margin-top: 30px;
-    margin-bottom: 30px;
-}
-
-footer {
-    text-align: center;
-    font-size: 1rem;
-    margin-top: 50px;
-}
-
-/* Navigation Button */
-.btn-outline-dark {
-    padding: 10px 20px;
-    font-size: 1.1rem;
-    text-transform: uppercase;
-    border-radius: 5px;
-    border: 2px solid #333;
     color: #333;
 }
 
-.btn-outline-dark:hover {
-    background-color: #333;
+/* Header Styles */
+.header {
+    background-color: #007bff;
     color: white;
+    text-align: center;
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+}
+
+.header p {
+    margin: 0;
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+/* Main Content Styles */
+.main-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.result-table {
+    overflow-x: auto;
+}
+
+.result-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+}
+
+.result-table th,
+.result-table td {
+    text-align: left;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.result-table th {
+    background-color: #007bff;
+    color: white;
+}
+
+.result-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Button Styles */
+.actions {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.actions .btn {
+    text-decoration: none;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.actions .btn:hover {
+    background-color: #0056b3;
+    text-decoration: none;
+}
+
+/* Footer Styles */
+.footer {
+    text-align: center;
+    padding: 1rem 0;
+    background-color: #f1f1f1;
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: #555;
 }
